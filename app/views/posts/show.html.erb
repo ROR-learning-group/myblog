@@ -11,8 +11,13 @@
 </p>
 
 <p>
+  <strong>Comments:</strong>
+  <%= @post.comments %>
+</p>
+
+<p>
   <strong>User:</strong>
-  <%= @post.User %>
+  <%= @post.user %>
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |
