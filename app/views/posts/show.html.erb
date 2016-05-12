@@ -1,24 +1,79 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <%= @post.content %>
-</p>
-
-<p>
-  <strong>Comments:</strong>
-  <%= @post.comments %>
-</p>
-
-<p>
-  <strong>User:</strong>
-  <%= @post.user %>
-</p>
-
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+<% content_for :view_specific_css do %>
+    <%= stylesheet_link_tag 'post/show' %>
+<% end %>
+<div class="row">
+  <div class="col-xs-12 col-md-8 col-md-offset-2">
+    <% if alert %>
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Alert! </strong> <%= alert %>
+        </div>
+    <% elsif notice %>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Notice. </strong> <%= notice %>
+        </div>
+    <% end %>
+    <h3 class="text-center"> <%= @post.title %> </h3>
+    <p id="article">
+      <%= @post.content %>
+    </p>
+    <div id='show-control-block' class="clearfix">
+      <span class="pull-left">
+        <i> <%= @post.created_at %> posted by</i>
+          <%= image_tag avatar_path(@post.user_id), class: 'img-thumbnail', width: '40px'%> <%= username(@post.user_id) %>
+      </span>
+      <div class="pull-right">
+        <% if allow_change?(@post.user_id) %>
+            <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_path(id: @post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
+            <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), edit_post_path(id: @post.id), class: 'btn btn-warning btn-xs'%>
+        <% end %>
+      </div>
+    </div>
+    <h3 class="text-center"> Comments </h3>
+    <%= form_for [@post, @new_comment] do |f| %>
+        <div class="form-group">
+          <%= f.label :name %>
+          <%= f.text_field :name, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :email %>
+          <%= f.text_field :email, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :content %>
+          <%= f.text_area :content, class: 'form-control' %>
+        </div>
+        <div class="text-center">
+          <%= f.submit 'Submit', class: 'btn btn-success' %>
+        </div>
+    <% end %>
+    <% @comments.each do |comment| %>
+        <div class="panel panel-default">
+          <div class="panel-heading clearfix">
+            <span class="pull-left">
+              Name:
+              <%= comment.name %>
+            </span>
+            <span class="pull-right">
+              Email:
+              <%= mail_to comment.email %>
+            </span>
+          </div>
+          <div class="panel-body">
+            <%= comment.content %>
+          </div>
+          <div class="panel-footer clearfix">
+            <div class="pull-left">
+              Posted Date: <%= comment.created_at %>
+            </div>
+            <div class="pull-right">
+              <% if allow_change?(@post.user_id) %>
+                  <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_comment_path(id: comment.id, post_id: @post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
+              <% end %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>

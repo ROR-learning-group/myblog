@@ -1,39 +1,47 @@
-
 <div class="row">
   <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
-    <% if notice %>
+    <% if alert %>
         <div class="alert alert-danger alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Warning!</strong> <%= notice %>
+          <strong>Alert! </strong> <%= alert %>
+        </div>
+    <% elsif notice %>
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>Notice. </strong> <%= notice %>
         </div>
     <% end %>
     <h1>Posts List</h1>
+    <%=  link_to 'New Article', new_post_path, class: 'btn btn-primary', style: 'margin-bottom: 5px;' %>
   </div>
   <div class="col-xs-12 col-md-8 col-md-offset-2">
     <% @posts.each do |post| %>
         <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>
-              <%=post.title%>
+          <div class="panel-heading clearfix">
+            <h4 class="pull-left">
+              <%= truncate(post.title, length: 50)%>
             </h4>
+            <span class="pull-right">
+                <img src="<%= avatar_path(post.user_id)%>" width="40px" class="img-thumbnail"/>
+                <%= username(post.user_id) %>
+            </span>
           </div>
           <div class="panel-body">
             <%=truncate(post.content, length: 100)%>
           </div>
-          <div class="panel-footer">
+          <div class="panel-footer clearfix">
             <div class="pull-left">
               Posted Date: <%= post.created_at %>
             </div>
             <div class="pull-right">
-              <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), '#', class: 'btn btn-danger btn-xs'%>
-              <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), '#', class: 'btn btn-warning btn-xs'%>
-              <%= link_to raw('<span class="glyphicon glyphicon-eye-open"></span> Read more'), '#', class: 'btn btn-success btn-xs'%>
+              <% if allow_change?(post.user_id) %>
+                <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_path(id: post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
+                <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), edit_post_path(id: post.id), class: 'btn btn-warning btn-xs'%>
+              <% end %>
+              <%= link_to raw('<span class="glyphicon glyphicon-eye-open"></span> Read more'), post_path(id: post.id), class: 'btn btn-success btn-xs'%>
             </div>
-            <div class="clearfix"></div>
           </div>
         </div>
     <% end %>
   </div>
-
-
-
+ </div>
