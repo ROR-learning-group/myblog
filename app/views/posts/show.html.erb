@@ -2,7 +2,7 @@
     <%= stylesheet_link_tag 'post/show' %>
 <% end %>
 <div class="row">
-  <div class="col-xs-12 col-md-8 col-md-offset-2">
+  <div id="post_content" class="col-xs-12 col-md-8 col-md-offset-2">
     <% if alert %>
         <div class="alert alert-danger alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -14,7 +14,7 @@
           <strong>Notice. </strong> <%= notice %>
         </div>
     <% end %>
-    <h3 class="text-center"> <%= @post.title %> </h3>
+    <h3 id="post_title" class="text-center"> <%= @post.title %> </h3>
     <p id="article">
       <%= @post.content %>
     </p>
@@ -31,7 +31,7 @@
       </div>
     </div>
     <h3 class="text-center"> Comments </h3>
-    <%= form_for [@post, @new_comment] do |f| %>
+    <%= form_for [@post, @new_comment],html: {id: 'comment_form'} do |f| %>
         <div class="form-group">
           <%= f.label :name %>
           <%= f.text_field :name, class: 'form-control' %>

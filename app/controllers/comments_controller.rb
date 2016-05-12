@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  before_action :allow_delete?, only: [:destroy]
 
   def create
     @comment = Comment.new(comment_params)
@@ -17,5 +18,13 @@ class CommentsController < ApplicationController
       cp = params.require(:comment).permit(:name, :email, :content)
       cp[:post_id] = params[:post_id]
       cp
+    end
+    def allow_delete?
+      post = Post.where(id: params[:post_id]).first
+      comment = post.comments.where(id: params[:id]).first
+      if post.user_id != session[:user_id] || comment.nil?
+        redirect_to post_path(id: params[:post_id]), alert: 'You are not able to do this.'
+      end
+
     end
 end

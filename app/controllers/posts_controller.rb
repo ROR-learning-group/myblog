@@ -59,6 +59,6 @@ class PostsController < ApplicationController
 
     def allow_change?
       @post = current_user.posts.where(id: params[:id]).first
-      redirect_to posts_url, alert: 'You isn\'t able to do this.' if @post.nil?
+      redirect_to posts_url, alert: 'You are not able to do this.' if @post.nil?
     end
 end
