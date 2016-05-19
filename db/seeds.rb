@@ -10,9 +10,10 @@ if User.all.empty?
   puts 'creating users Seed.'
   3.times do
     username = Faker::Internet.user_name
-    password = '1234'
+    password = '123456'
     avatar_path = Faker::Avatar.image(username, '50x50')
-    User.create(username: username, password: password, avatar_path: avatar_path)
+    email = Faker::Internet.email
+    User.create!({:email => email, :username => username, :password => password, :password_confirmation => password , :avatar_path => avatar_path})
 
   end
 end

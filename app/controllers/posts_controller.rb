@@ -1,8 +1,7 @@
 class PostsController < ApplicationController
-  before_action :login?, except: [:index, :show]
-  before_action :allow_change?, except: [:index, :show, :new, :create]
+  before_action :authenticate_user!, except: [:index, :show]
   def index
-    @posts = Post.all.order(created_at: :desc)
+    @posts = Post.order(created_at: :desc).page params[:page]
   end
 
   def show
@@ -16,6 +15,7 @@ class PostsController < ApplicationController
   end
 
   def edit
+    @post = current_user.posts.where(id: params[:id]).first
   end
 
   def create
@@ -36,6 +36,7 @@ class PostsController < ApplicationController
   end
 
   def destroy
+    @post = current_user.posts.where(id: params[:id]).first
     @post.destroy
     redirect_to posts_url, notice: 'Post was successfully destroyed.'
   end
@@ -44,17 +45,6 @@ class PostsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
       params.require(:post).permit(:title, :content)
-    end
-
-    #Get current user from model
-    def current_user
-      User.where(username: session[:username]).first
-    end
-
-    def login?
-      if session[:username].nil?
-        redirect_to posts_url, notice: 'Please login to do this.' if @post.nil?
-      end
     end
 
     def allow_change?

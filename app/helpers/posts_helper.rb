@@ -1,6 +1,10 @@
 module PostsHelper
   def username(id)
-    User.where(id: id).first.username.camelcase
+      User.where(id: id).first.username.camelcase
+  end
+
+  def email(id)
+    User.where(id: id).first.email
   end
 
   def avatar_path(id)
@@ -8,10 +12,10 @@ module PostsHelper
   end
 
   def allow_change?(user_id)
-    if session[:user_id].nil?
+    if current_user.nil?
       false
     else
-      user_id == session[:user_id]
+      current_user.id == user_id
     end
   end
 

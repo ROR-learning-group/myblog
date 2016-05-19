@@ -20,9 +20,9 @@ class CommentsController < ApplicationController
       cp
     end
     def allow_delete?
-      post = Post.where(id: params[:post_id]).first
+      post = current_user.posts.where(id: params[:post_id]).first
       comment = post.comments.where(id: params[:id]).first
-      if post.user_id != session[:user_id] || comment.nil?
+      if comment.nil?
         redirect_to post_path(id: params[:post_id]), alert: 'You are not able to do this.'
       end
 

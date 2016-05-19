@@ -1,18 +1,10 @@
 <div class="row">
   <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
-    <% if alert %>
-        <div class="alert alert-danger alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Alert! </strong> <%= alert %>
-        </div>
-    <% elsif notice %>
-        <div class="alert alert-warning alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Notice. </strong> <%= notice %>
-        </div>
-    <% end %>
     <h1>Posts List</h1>
     <%=  link_to 'New Article', new_post_path, class: 'btn btn-primary', style: 'margin-bottom: 5px;' %>
+  </div>
+  <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
+  <%= paginate @posts %>
   </div>
   <div class="col-xs-12 col-md-8 col-md-offset-2">
     <% @posts.each do |post| %>
@@ -23,7 +15,7 @@
             </h4>
             <span class="pull-right">
                 <img src="<%= avatar_path(post.user_id)%>" width="40px" class="img-thumbnail"/>
-                <%= username(post.user_id) %>
+                <%= mail_to email(post.user_id),username(post.user_id)   %>
             </span>
           </div>
           <div class="panel-body">
@@ -44,4 +36,4 @@
         </div>
     <% end %>
   </div>
- </div>
+</div>

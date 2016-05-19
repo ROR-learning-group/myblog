@@ -3,17 +3,6 @@
 <% end %>
 <div class="row">
   <div id="post_content" class="col-xs-12 col-md-8 col-md-offset-2">
-    <% if alert %>
-        <div class="alert alert-danger alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Alert! </strong> <%= alert %>
-        </div>
-    <% elsif notice %>
-        <div class="alert alert-warning alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Notice. </strong> <%= notice %>
-        </div>
-    <% end %>
     <h3 id="post_title" class="text-center"> <%= @post.title %> </h3>
     <p id="article">
       <%= @post.content %>

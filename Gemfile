@@ -28,6 +28,9 @@ gem 'bootstrap-sass', '~> 3.3.6'
 # Devise
 gem 'devise'
 
+# pager
+gem 'kaminari'
+
 # Generate fake data
 gem 'faker'
 
