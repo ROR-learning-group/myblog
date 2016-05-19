@@ -25,6 +25,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Boostrap fronted end framework
 gem 'bootstrap-sass', '~> 3.3.6'
+# Devise
+gem 'devise'
 
 # Generate fake data
 gem 'faker'
