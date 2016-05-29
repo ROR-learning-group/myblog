@@ -3,7 +3,6 @@
 <head>
   <title>My Blog</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= yield :view_specific_css %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 
@@ -87,6 +86,5 @@
     <% end %>
     <%= yield %>
   </div>
-  <%= yield :view_specific_js %>
 </body>
 </html>

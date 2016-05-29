@@ -3,10 +3,14 @@
     <h1>Posts List</h1>
     <%=  link_to 'New Article', new_post_path, class: 'btn btn-primary', style: 'margin-bottom: 5px;' %>
   </div>
-  <div class="col-xs-12 col-md-8 col-md-offset-2 text-center">
-  <%= paginate @posts %>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-md-10 col-md-offset-1 text-center">
+    <%= paginate @posts %>
   </div>
-  <div class="col-xs-12 col-md-8 col-md-offset-2">
+</div>
+<div class="row">
+  <div class="col-xs-12 col-md-10 col-md-offset-1">
     <% @posts.each do |post| %>
         <div class="panel panel-default">
           <div class="panel-heading clearfix">
@@ -14,8 +18,8 @@
               <%= truncate(post.title, length: 50)%>
             </h4>
             <span class="pull-right">
-                <img src="<%= avatar_path(post.user_id)%>" width="40px" class="img-thumbnail"/>
-                <%= mail_to email(post.user_id),username(post.user_id)   %>
+                <img src="<%= post.user.avatar_path %>" width="40px" class="img-thumbnail"/>
+              <%= mail_to post.user.email, post.user.username  %>
             </span>
           </div>
           <div class="panel-body">
@@ -23,12 +27,25 @@
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-left">
+              <%= post.likes_count %>
+              <% if !@user_likes.include? post.id %>
+                  <%= link_to raw('Like <span class="glyphicon glyphicon-thumbs-up"></span>'), post_like_path(post_id: post.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+              <% else %>
+                  <%= link_to raw('Dislike X'), post_dislike_path(post_id: post.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+              <% end %>
+              <%= post.hates_count %>
+              <% if !@user_hates.include? post.id %>
+                  <%= link_to raw('Hate <span class="glyphicon glyphicon-thumbs-down"></span>'), post_hate_path(post_id: post.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
+              <% else %>
+                  <%= link_to raw('Dishate X'), post_dishate_path(post_id: post.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
+              <% end %>
               Posted Date: <%= post.created_at %>
             </div>
             <div class="pull-right">
-              <% if allow_change?(post.user_id) %>
-                <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_path(id: post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
-                <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), edit_post_path(id: post.id), class: 'btn btn-warning btn-xs'%>
+              <%= post.comments.size %> <span class="glyphicon glyphicon-comment"></span>
+              <% if post.user == current_user %>
+                  <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_path(id: post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
+                  <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), edit_post_path(id: post.id), class: 'btn btn-warning btn-xs'%>
               <% end %>
               <%= link_to raw('<span class="glyphicon glyphicon-eye-open"></span> Read more'), post_path(id: post.id), class: 'btn btn-success btn-xs'%>
             </div>
@@ -36,4 +53,6 @@
         </div>
     <% end %>
   </div>
+</div>
+
 </div>

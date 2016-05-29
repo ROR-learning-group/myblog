@@ -2,8 +2,18 @@ Rails.application.routes.draw do
   devise_for :users
   root 'posts#index'
   resources :posts do
-    resources :comments
+    post 'like', to:'like#post_like'
+    post 'dislike', to:'like#post_dislike'
+    post 'hate', to:'like#post_hate'
+    post 'dishate', to:'like#post_dishate'
+    resources :comments do
+      post 'like', to:'like#comment_like'
+      post 'dislike', to:'like#comment_dislike'
+      post 'hate', to:'like#comment_hate'
+      post 'dishate', to:'like#comment_dishate'
+    end
   end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

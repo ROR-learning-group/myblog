@@ -11,25 +11,52 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160519012910) do
+ActiveRecord::Schema.define(version: 20160529111354) do
+
+  create_table "comment_likes", force: :cascade do |t|
+    t.integer  "status",     default: 0
+    t.integer  "comment_id"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "comment_likes", ["comment_id"], name: "index_comment_likes_on_comment_id"
+  add_index "comment_likes", ["user_id"], name: "index_comment_likes_on_user_id"
 
   create_table "comments", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
     t.string   "content"
     t.integer  "post_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "likes_count", default: 0
+    t.integer  "hates_count", default: 0
   end
 
   add_index "comments", ["post_id"], name: "index_comments_on_post_id"
+
+  create_table "post_likes", force: :cascade do |t|
+    t.integer  "status",     default: 0
+    t.integer  "post_id"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  add_index "post_likes", ["post_id"], name: "index_post_likes_on_post_id"
+  add_index "post_likes", ["user_id"], name: "index_post_likes_on_user_id"
 
   create_table "posts", force: :cascade do |t|
     t.string   "title"
     t.string   "content"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "comments_count", default: 0
+    t.integer  "likes_count",    default: 0
+    t.integer  "hates_count",    default: 0
   end
 
   add_index "posts", ["user_id"], name: "index_posts_on_user_id"

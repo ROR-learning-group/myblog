@@ -5,3 +5,25 @@
 body {
   padding-top: 60px;
 }
+
+#show_post_title {
+  border-bottom: solid 2px;
+}
+
+#show_comment_form {
+  margin-bottom: 10px;
+}
+
+#show_post_content {
+  border-left: dotted;
+  border-right: dotted;
+}
+
+#show_control_block {
+  padding-top: 10px;
+}
+
+#show_article{
+  min-height: 200px;
+  font-size: 1.5em;
+}

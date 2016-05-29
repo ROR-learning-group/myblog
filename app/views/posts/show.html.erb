@@ -1,26 +1,35 @@
-<% content_for :view_specific_css do %>
-    <%= stylesheet_link_tag 'post/show' %>
-<% end %>
 <div class="row">
-  <div id="post_content" class="col-xs-12 col-md-8 col-md-offset-2">
-    <h3 id="post_title" class="text-center"> <%= @post.title %> </h3>
-    <p id="article">
+  <div id="show_post_content" class="col-xs-12 col-md-10 col-md-offset-1">
+    <h3 id="show_post_title" class="text-center"> <%= @post.title %> </h3>
+    <p id="show_article">
       <%= @post.content %>
     </p>
-    <div id='show-control-block' class="clearfix">
+    <div id="show_control_block" class="clearfix">
       <span class="pull-left">
         <i> <%= @post.created_at %> posted by</i>
-          <%= image_tag avatar_path(@post.user_id), class: 'img-thumbnail', width: '40px'%> <%= username(@post.user_id) %>
+          <%= image_tag @post.user.avatar_path, class: 'img-thumbnail', width: '40px'%> <%= @post.user.username %>
       </span>
       <div class="pull-right">
-        <% if allow_change?(@post.user_id) %>
+        <% if @post.user == current_user %>
             <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_path(id: @post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
             <%= link_to raw('<span class="glyphicon glyphicon-edit"></span> Edit'), edit_post_path(id: @post.id), class: 'btn btn-warning btn-xs'%>
+        <% end %>
+        <%= @post.likes_count %>
+        <% if @user_post_like.nil? %>
+            <%= link_to raw('Like <span class="glyphicon glyphicon-thumbs-up"></span>'), post_like_path(post_id: @post.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+        <% else %>
+            <%= link_to raw('Dislike X'), post_dislike_path(post_id: @post.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+        <% end %>
+        <%= @post.hates_count %>
+        <% if @user_post_hate.nil? %>
+            <%= link_to raw('Hate <span class="glyphicon glyphicon-thumbs-down"></span>'), post_hate_path(post_id: @post.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
+        <% else %>
+            <%= link_to raw('Dishate X'), post_dishate_path(post_id: @post.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
         <% end %>
       </div>
     </div>
     <h3 class="text-center"> Comments </h3>
-    <%= form_for [@post, @new_comment],html: {id: 'comment_form'} do |f| %>
+    <%= form_for [@post, @new_comment],html: {id: 'show_comment_form'} do |f| %>
         <div class="form-group">
           <%= f.label :name %>
           <%= f.text_field :name, class: 'form-control' %>
@@ -54,15 +63,30 @@
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-left">
-              Posted Date: <%= comment.created_at %>
+              Posted Date: <%= comment.id  %>
             </div>
             <div class="pull-right">
-              <% if allow_change?(@post.user_id) %>
+              <% if @post.user == current_user %>
                   <%= link_to raw('<span class="glyphicon glyphicon-remove-circle"></span> Delete'), post_comment_path(id: comment.id, post_id: @post.id), class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: 'Are you sure?'}%>
+              <% end %>
+              <%= comment.likes_count %>
+              <% if !@user_comment_likes.include? comment.id %>
+                  <%= link_to raw('Like <span class="glyphicon glyphicon-thumbs-up"></span>'), post_comment_like_path(post_id: @post.id, comment_id: comment.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+              <% else %>
+                  <%= link_to raw('Dislike X'), post_comment_dislike_path(post_id: @post.id, comment_id: comment.id, ref: request.fullpath), class: 'btn btn-primary btn-xs', method: :post %>
+              <% end %>
+              <%= comment.hates_count %>
+              <% if !@user_comment_hates.include? comment.id %>
+                  <%= link_to raw('Hate <span class="glyphicon glyphicon-thumbs-down"></span>'), post_comment_hate_path(post_id: @post.id, comment_id: comment.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
+              <% else %>
+                  <%= link_to raw('Dishate X'), post_comment_dishate_path(post_id: @post.id, comment_id: comment.id, ref: request.fullpath), class: 'btn btn-danger btn-xs', method: :post %>
               <% end %>
             </div>
           </div>
         </div>
     <% end %>
+    <div class="text-center">
+      <%= paginate @comments %>
+    </div>
   </div>
 </div>

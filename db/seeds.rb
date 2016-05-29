@@ -31,7 +31,7 @@ end
 if Comment.all.empty?
   puts 'creating comment seed.'
   Post.all.each do |post|
-    3.times do
+    15.times do
       post.comments.create(name: Faker::Name.name, email: Faker::Internet.email, content: Faker::Lorem.paragraph(sentence_count=2, supplemental=true, random_sentences_to_add=3))
     end
   end
